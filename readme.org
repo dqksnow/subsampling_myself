@@ -13,7 +13,10 @@
 
 - [ ] Sampling with replacement
 - [ ] Poisson sampling
-- [X] A, L, LCC, unweighted estimator with bias correction
+- [ ] A, L, LCC, unweighted estimator with bias correction
+- [ ] [[https://arxiv.org/pdf/2110.13048.pdf][optimal sampling for rare events]]; [[file:references/RareLogistic][julia code]]. The method can be
+  implemented using logistic regression with the log-odds corrections as a
+  off-set variable. I put the julia code so that you have it.
 
 ** TODO GLM
 
@@ -24,9 +27,14 @@ You can use existing packages for fitting, right?
 - [ ] A, L 
 - [ ] [[https://www.tandfonline.com/doi/full/10.1080/10618600.2020.1778483][OSUMC]]
 	- weighted estimator
-	- [[file:references/OSUMC/OSUMC_unweighted.pdf][unweighted estimator]]: This method can be fitted with glm in R directly.
+	- [[file:references/OSUMC/OSUMC_unweighted.pdf][unweighted estimator]]: This method can be fitted with glm in R directly. The
+    code is in Python; I put it the so that you have it. For this method, the
+    sampling probabilities are very similar to OSMAC. 
 
-** TODO Quantile regression
+** TODO [[https://arxiv.org/pdf/2001.10168.pdf][Quantile regression]]
+
+Codes are available [[https://filedn.com/l3ajGDP3gyLyPFvbUFtvg48/code/][here]]. It is written in julia, but the quantile regression is
+done by calling the R package.
 
 - [ ] Sampling with replacement
 - [ ] L with iterative sampling
