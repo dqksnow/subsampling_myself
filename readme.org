@@ -14,7 +14,7 @@
 - [ ] Sampling with replacement
 - [ ] Poisson sampling
 - [ ] A, L, LCC, unweighted estimator with bias correction
-- [ ] [[https://arxiv.org/pdf/2110.13048.pdf][optimal sampling for rare events]]; [[file:references/RareLogistic][julia code]]. The method can be
+- [ ] [[https://arxiv.org/pdf/2110.13048.pdf][optimal sampling for rare events]]; [[file:references/RareLogistic/][julia code]]. The method can be
   implemented using logistic regression with the log-odds corrections as a
   off-set variable. I put the julia code so that you have it.
 
