@@ -1,0 +1,32 @@
+#+TITLE: Potential method to implement
+
+* Random Sampling
+
+** TODO Softmax regression
+
+- [ ] Sampling with replacement
+- [ ] Poisson sampling
+- [ ] A, L, minimum prediction error
+- [ ] LUC
+
+** TODO Logistic regression
+
+- [ ] Sampling with replacement
+- [ ] Poisson sampling
+- [X] A, L, LCC, unweighted estimator with bias correction
+
+** TODO GLM
+
+You can use existing packages for fitting, right?
+
+- [ ] Sampling with replacement
+- [ ] Poisson sampling
+- [ ] A, L 
+- [ ] OSUMC
+	- weighted estimator
+	- unweighted estimator
+
+** TODO Quantile regression
+
+- [ ] Sampling with replacement
+- [ ] L with iterative sampling
