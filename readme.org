@@ -24,7 +24,7 @@ You can use existing packages for fitting, right?
 - [ ] A, L 
 - [ ] [[https://www.tandfonline.com/doi/full/10.1080/10618600.2020.1778483][OSUMC]]
 	- weighted estimator
-	- [[file:references/OSUMC_unweighted.pdf][unweighted estimator]]: This method can be fitted with glm in R directly.
+	- [[file:references/OSUMC/OSUMC_unweighted.pdf][unweighted estimator]]: This method can be fitted with glm in R directly.
 
 ** TODO Quantile regression
 
