@@ -1,0 +1,35 @@
+\documentclass[letterpaper,12pt,hidelinks]{article}
+\usepackage{configuration, natbib,mathtools,rotating, showlabels}
+\usepackage[T1]{fontenc}
+\graphicspath{{figures/}}
+\usepackage{cases}
+
+
+
+\title{R package}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section{Logistic regression}
+
+\subsection{Sampling with replacement}
+
+The optimal subsampling probabilities are
+\begin{align*}
+    \pi_i^\mmse &= \frac{|y_i - p_i(\hbeta_\mle)|\|\M_N^{-1}\x_i\|}{\sumN |y_i - p_i(\hbeta_\mle)|\|\M_N^{-1}\x_i\|}, \\
+    \pi_i^\mvc &= \frac{|y_i - p_i(\hbeta_\mle)|\|\x_i\|}{\sumN |y_i - p_i(\hbeta_\mle)|\|\x_i\|}\\
+\end{align*}
+where
+\begin{align*}
+    p_i(\bbeta) &= \frac{\exp(\x_i\tp \bbeta)}{1 + \exp(\x_i\tp \bbeta)}, \\
+    \M_N &= \oneN \sumN p_i(\hbeta_\mle)\{1 - p_i(\hbeta_\mle)\} \x_i\x_i\tp.
+\end{align*}
+
+\subsection{Poisson subsampling}
+
+
+
+\end{document}

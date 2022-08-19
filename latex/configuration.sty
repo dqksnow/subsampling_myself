@@ -1,0 +1,143 @@
+
+
+
+
+\usepackage{amsfonts, amsmath, amsthm, graphicx, float,
+  subcaption, enumerate, xcolor, natbib, verbatim,algorithm,
+  algorithmic, url, hyperref, epsfig, amssymb, bm}
+\usepackage[shortlabels]{enumitem}
+% \usepackage{lscape,longtable}
+%\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in]{geometry}
+%\linespread{1.25}
+\graphicspath{{figures/}}
+% \setlength{\parindent}{0cm}
+\allowdisplaybreaks
+
+% \def\m{\boldsymbol}%
+% \newcommand{\bm}[1]{\mbox{\boldmath$ #1 $\unboldmath}}
+% \def\vb{\bm{\beta}}%
+% \def\v{\mathbf}%
+
+\newcommand{\calH}{\cal{H}}
+
+\newcommand{\0}{\mathbf{0}}
+\newcommand{\1}{\mathbf{1}}
+\renewcommand{\H}{\mathbf{H}}
+\newcommand{\A}{\mathbf{A}}
+\renewcommand{\b}{\mathbf{b}}
+\newcommand{\B}{\mathbf{B}}
+\newcommand{\I}{\mathbf{I}}
+\newcommand{\D}{\mathbf{D}}
+\newcommand{\e}{\mathbf{e}}
+% \newcommand{\m}{m}
+\renewcommand{\k}{\mathbf{k}}
+\newcommand{\M}{\mathbf{M}}
+\renewcommand{\S}{\mathbf{S}}
+\newcommand{\s}{\mathbf{s}}
+% \newcommand{\t}{\mathbf{t}}
+\renewcommand{\u}{\mathbf{u}}
+\newcommand{\U}{\mathbf{U}}
+\renewcommand{\v}{\mathbf{v}}
+\newcommand{\V}{\mathbf{V}}
+\newcommand{\w}{\mathbf{w}}
+\newcommand{\W}{\mathbf{W}}
+\newcommand{\x}{\mathbf{x}}
+\newcommand{\X}{\mathbf{X}}
+\newcommand{\z}{\mathbf{z}}
+\newcommand{\y}{\mathbf{y}}
+\newcommand{\Y}{\mathbf{Y}}
+\newcommand{\Z}{\mathbf{Z}}
+\newcommand{\g}{\mathbf{g}}
+\newcommand{\G}{\mathbf{G}}
+\newcommand{\dm}{\dot{\m}}
+\newcommand{\ddm}{\ddot{\m}}
+\newcommand{\dM}{\dot{\M}}
+\newcommand{\ddM}{\ddot{\M}}
+\newcommand{\df}{\dot{f}}
+
+\newcommand{\bDelta}{\boldsymbol{\Delta}}
+\newcommand{\bGamma}{\boldsymbol{\Gamma}}
+\newcommand{\btheta}{\boldsymbol{\theta}}
+\newcommand{\bbeta}{\boldsymbol{\beta}}
+\newcommand{\cbeta}{\check{\boldsymbol{\beta}}}
+\newcommand{\hbeta}{\hat{\boldsymbol{\beta}}}
+\newcommand{\tbeta}{\tilde{\boldsymbol{\beta}}}
+\newcommand{\bLambda}{\boldsymbol{\Lambda}}
+\newcommand{\bmu}{\boldsymbol{\mu}}
+\newcommand{\bOmega}{\boldsymbol{\Omega}}
+\newcommand{\bSigma}{\boldsymbol{\Sigma}}
+\newcommand{\bpi}{\boldsymbol{\pi}}
+\newcommand{\eeta}{\boldsymbol{\eta}}%
+\newcommand{\heta}{\hat{\boldsymbol{\eta}}}
+
+\newcommand{\ttheta}{{\tilde{\boldsymbol{\theta}}}}
+\newcommand{\htheta}{{\hat{\boldsymbol{\theta}}}}
+\newcommand{\ctheta}{{\check{\boldsymbol{\theta}}}}
+\newcommand{\atheta}{{\acute{\boldsymbol{\theta}}}}
+
+\newcommand{\onen}{\frac{1}{n}}
+\newcommand{\oneN}{\frac{1}{N}}
+\newcommand{\onenr}{\frac{1}{nr}}
+\newcommand{\onepi}{\frac{1}{\pi_i}}
+\newcommand{\op}{o_{P}(1)}
+\newcommand{\opf}{o_{{P}|\Fn}(1)}
+\newcommand{\opfb}{o_{{P}|\Fn,\hat\bbeta_1}(1)}
+\newcommand{\opb}{o_{{P}|\hat\bbeta_1}(1)}
+\newcommand{\Op}{O_{P}(1)}
+\newcommand{\Opf}{O_{{P}|\Fn}(1)}
+\newcommand{\Opfb}{O_{{P}|\Fn,\hat\bbeta_1}(1)}
+\newcommand{\ud}{\mathrm{d}}
+% \newcommand{\wh}{\widehat}
+% \newcommand{\wt}{\widetilde}
+\newcommand{\Fn}{\mathcal{D}_N}
+\newcommand{\dt}{\mathcal{D}_1}
+\newcommand{\sumn}{\sum_{i=1}^{n}}
+\newcommand{\sumk}{\sum_{k=1}^{K}}
+\newcommand{\sumlk}{\sum_{l=1}^{K}}
+\newcommand{\sumN}{\sum_{i=1}^{N}}
+\newcommand{\sumj}{\sum_{j=1}^p}
+\newcommand{\oner}{\frac{1}{r}}%
+\newcommand{\sumr}{\sum_{i=1}^{r}}%
+\newcommand{\partiald}[2]{\frac{\partial #1}{\partial #2}}
+\newcommand{\tp}{^{\top}}
+\newcommand{\tr}{\mathrm{tr}}
+\newcommand{\cvp}{\xrightarrow{P}}
+\newcommand{\cvpf}{\xrightarrow{P|\Fn}}
+\newcommand{\cvpfb}{\xrightarrow{P|\Fn,\tilde\bbeta_0}}
+\newcommand{\cvd}{\xrightarrow{D}}
+\newcommand{\cvdf}{\xrightarrow{D|\Fn}}
+\newcommand{\cvdfb}{\xrightarrow{D|\Fn,\hat\bbeta_1}}
+%\renewcommand{\Pr}{\mathbb{P}}
+\newcommand{\Exp}{\mathbb{E}}
+\newcommand{\Nor}{\mathbb{N}}
+\newcommand{\Var}{\mathbb{V}}
+\newcommand{\mmse}{{\mathrm{A}}}
+\newcommand{\mvc}{{\mathrm{L}}}
+\newcommand{\uni}{{\mathrm{uni}}}
+\newcommand{\os}{{\mathrm{OS}}}
+\newcommand{\sub}{{\mathrm{sub}}}
+\newcommand{\full}{{\mathrm{full}}}
+
+
+\renewcommand{\d}{\mathbf{d}}
+\renewcommand{\c}{\mathbf{c}}
+\newcommand{\bxi}{\boldsymbol{\xi}}
+\newcommand{\R}{\mathbf{R}}
+\newcommand{\J}{\mathbf{J}}
+
+%\newtheorem{lemma}{Lemma}
+%\newtheorem{theorem}{Theorem}
+%\newtheorem{prop}{Proposition}
+%% \newtheorem{algorithm}{Algorithm}
+%
+%% \theoremstyle{remark}
+%\newtheorem{remark}{{\bf Remark}}
+\newtheorem{assumption}{\bf Assumption}
+
+\newcommand{\mle}{{\textnormal{\tiny MLE}}}%
+
+\newcommand{\red}{\color{red}}
+\newcommand{\blue}{\color{blue}}
+\newcommand{\boxit}[1]{\vbox{\hrule\hbox{\vrule\kern6pt\vbox{\kern6pt#1\kern6pt}\kern6pt\vrule}\hrule}}
+\newcommand{\why}[1]{\textcolor{red}{(WHY: #1)}}
+\newcommand{\yyq}[1]{\textcolor{teal}{(YYQ: #1)}}

@@ -1,28 +1,40 @@
-#' Title
+#' Compute optimal subsampling probabilities for
+#' logistic regression
 #'
-#' @param X Covariate matrix
+#' @param X A N \times d matrix
+#' @param criteria Either "optA" or "optL"
 #' @param y Response vector
-#' @param beta.prop
-#' @param idx.prop
-#' @param PI.prop
+#' @param pilot_ssp Subsampling probabilities obtaining pilot sample
+#' @param pilot_indx Data index of the pilot sample
 #'
-#' @return
+#' @return Optimal subsampling probabilities under A- and L-
+#' optimality criterion
 #' @export
 #'
 #' @examples
-Log_optA <- function(X, y, beta.prop, idx.prop, PI.prop){
+logistic_swr_ossp <- function(X, y, pilot_ssp, pilot_indx,
+                          criteria = c("optA", "optL")){
+  criteria = match.arg(criteria)
+  pinv_pilot <- 1/pilot_ssp[pilot_indx]
+  beta_pilot <- logistic_coef_estimate(X_pilot, y_pilot, pinv_pilot, pilot_indx)
+  pbeta  <- 1 - 1 / (1 + exp(c(X %*% beta_pilot)))
 
-  x.prop <- X[idx.prop,]
-  y.prop <- y[idx.prop]
-  pinv.prop <- 1/PI.prop[idx.prop]
-
-  P.prop  <- 1 - 1 / (1 + exp(c(X %*% beta.prop)))
-  p.prop <- P.prop[idx.prop]
-  phi.prop <- p.prop * (1 - p.prop)
-
-  W.prop <- solve(t(x.prop) %*% (x.prop * phi.prop * pinv.prop))
-  PI.opt <- sqrt((y - P.prop)^2 * rowSums((X %*% W.prop)^2))
-  PI.opt <- c(PI.opt / sum(PI.opt))
-  PI.opt
+  if (criteria == "optA"){
+    pbeta_pilot <- pbeta[pilot_indx]
+    phi_pilot <- pbeta_pilot * (1 - pbeta_pilot)
+    MN_solve_pilot <- solve(t(X_pilot) %*% (X_pilot * phi_pilot * pinv_pilot))
+    ossp <- sqrt((y - pbeta)^2 * rowSums((X %*% MN_solve_pilot)^2))
+  } else {
+    ossp <- sqrt((y - pbeta)^2 * rowSums(X^2))
+  }
+  ossp <- c(ossp / sum(PI.opt))
+  ossp
 }
+
+
+
+
+
+
+
 

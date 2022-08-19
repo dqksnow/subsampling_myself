@@ -1,1 +1,11 @@
-.Rproj.user
+*.Rproj.user
+*.Rhistory
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.pdf
+*.synctex.gz
+*.bbl
+*.blg
