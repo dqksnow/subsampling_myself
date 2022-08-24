@@ -9,11 +9,15 @@ proptional_ssp <- function(N, k, y){
   return(prob[y+1])
 }
 
-# sample observations with replacement with
-# case control subsampling probabilities
-# for logistic regression & softmax regression
-swr_indx <- function(N, r, prop){
-  return(sample(1:N, r, T, prop))
+# subsample with replacement
+swr_indx <- function(N, r, pi){
+  sample(1:N, r, T, pi)
+}
+
+# Poisson subsample
+poisson_indx <- function(N, r, pi){
+  u <- unif(0, 1)
+  c(1:N)[r*u < pi]
 }
 
 
