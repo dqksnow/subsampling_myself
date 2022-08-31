@@ -33,8 +33,8 @@ To accelerate the computation, $\M_N$ is calculated by the pilot sample.
 
 The optimal subsampling probabilities for Poisson subsampling is approximated by
 \begin{align*}
-    \pi_i^\mmse &= \frac{\{|y_i - p_i(\hbeta_\mle)|\|{\M_N^{*0}}^{-1}\x_i\|\}\wedge H^{*\mmse}}{N\Phi^{*\mmse}} \wedge 1,\\
-    \pi_i^\mvc &= \frac{\{|y_i - p_i(\hbeta_\mle)|\|\x_i\|\} \wedge H^{*\mvc}}{N\Phi^{*\mvc}} \wedge 1\\
+    \pi_i^\mmse &= \frac{\{|y_i - p_i(\hbeta_\mle)|\|{\M_N^{*0}}^{-1}\x_i\|\}\wedge H^{*\mmse}}{N\Phi^{*\mmse}} ,\\
+    \pi_i^\mvc &= \frac{\{|y_i - p_i(\hbeta_\mle)|\|\x_i\|\} \wedge H^{*\mvc}}{N\Phi^{*\mvc}}
 \end{align*}
 where
 \begin{align*}
@@ -43,5 +43,31 @@ where
     \Phi^{*\mmse} &= \sum_{i=1}^{r_0^*} \frac{\{|y_i^{*0} - p_i^{*0}(\hbeta_\mle)|\|{\M_N^{*0}}^{-1}\x_i^{*0}\|\} \wedge H^{*\mmse}}{N r_0^* \pi_i^{*0}}, \\
     \Phi^{*\mvc} &= \sum_{i=1}^{r_0^*} \frac{\{|y_i^{*0} - p_i^{*0}(\hbeta_\mle)|\|\x_i^{*0}\|\} \wedge H^{*\mvc}}{N r_0^* \pi_i^{*0}},
 \end{align*}
-and the subscript $\frac{r}{bN}$ means the $\frac{r}{bN}$ upper quantile of the vector.
+and the subscript $\frac{r}{bN}$ means the $1 - \frac{r}{bN}$ quantile of the vector.
+
+\subsection{Unweighted estimator}
+
+To correct the bias, the unweighted estimator is 
+\begin{align*}
+    \hbeta_{\mathrm{UW}} = \hbeta_{\mathrm{LLK}} + \hbeta_{\mathrm{PLT}}.
+\end{align*}
+
+For the pilot sample, 
+\begin{align*}
+    \hbeta_{\mathrm{UW}} = \hbeta_{\mathrm{LLK}} + \{\log(n_1/n_0), 0, ..., 0\}\tp.
+\end{align*}
+
+The final estimator is obtained by combining the subsample estimators from two 
+stages.
+\begin{align*}
+    \hbeta_{\mathrm{CMB}} = &\left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{UW}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{UW}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}^{-1}\\
+    &\quad \left[ \left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{UW}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp\right\}\hbeta_{\mathrm{UW}}^{*0} + \left\{\sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{UW}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}\hbeta_{\mathrm{UW}}^{*1} \right]
+\end{align*}
+where $\phi_i = p(\x_i, \bbeta)\{ 1 - p(\x_i, \bbeta)\}$.
+
+\subsection{Rare logistic}
+
+
+
+
 \end{document}

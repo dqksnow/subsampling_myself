@@ -23,18 +23,18 @@ poisson_indx <- function(N, r, pi){
 
 # compute coefficients for logistic regression
 # with survey package
-logistic_coef_estimate <- function(X, y, pinv, indx){
+logistic_coef_estimate <- function(X, y, weights, indx){
 
   data <- as.data.frame(cbind(y, X)[indx,])
   formula <- paste(colnames(data)[1], "~",
-                   paste(colnames(data)[-1], collapse = "+"))
+                   paste(colnames(data)[-1], collapse = "+"), "-1")
   design <- survey::svydesign(ids=~1,
-                              weights=~pinv,
+                              weights=~weights,
                               data = data)
   beta <- survey::svyglm(as.formula(formula),
                          design=design,
                          family=quasibinomial())$coefficients
-  return(beta)
+  beta
 }
 
 

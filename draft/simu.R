@@ -11,17 +11,56 @@ X <- rmvnorm(n, rep(0, d-1), sigmax)
 X <- cbind(1, X)
 P <- 1 - 1 / (1 + exp(X %*% beta0))
 y <- rbinom(n, 1, P)
+table(y)
+
+library("survey")
+
+## test use log(n_0/n_1) or log(n_1/n_0)
+## use log(n_1/n_0)
+n <- 1e4
+beta0  <- c(rep(1, 7))
+d <- length(beta0)
+corr  <- 0.5
+sigmax  <- matrix(corr, d-1, d-1) + diag(1-corr, d-1)
+
+set.seed(123)
+X <- rmvnorm(n, rep(0, d-1), sigmax)
+X <- cbind(1, X)
+P <- 1 - 1 / (1 + exp(X %*% beta0))
+y <- rbinom(n, 1, P)
+table(y)
+
+pilot_ssp <- proptional_ssp(N, k, y)
+beta_pilot <- rep(0, d)
+for (i in 1:1000){
+  pilot_indx <- swr_indx(N, 500, pilot_ssp)
+  pinv_pilot <- 1/pilot_ssp[pilot_indx]
+  beta_pilot <- beta_pilot + logistic_coef_estimate(X, y, 1, pilot_indx)
+}
+beta_pilot <- beta_pilot/1000
+log(sum(y)/(N - sum(y)))
+beta_full <- logistic_coef_estimate(X, y, 1, 1:N)
 
 
 
-## formula
-covariate <- ifelse(is.null(colnames(X)),
-                    paste(paste0("V", 1:d), collapse = "+"),
-                    paste(colnames(X), collapse = "+"))
-rsp <- ifelse(is.null(names(y)), "y", names(y))
-fmla <- ifelse(intercept,
-               paste0(rsp, "~", covariate),
-               paste0(rsp, "~", covariate, "-1"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
