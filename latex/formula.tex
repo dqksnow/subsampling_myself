@@ -67,7 +67,45 @@ where $\phi_i = p(\x_i, \bbeta)\{ 1 - p(\x_i, \bbeta)\}$.
 
 \subsection{Rare logistic}
 
+The unknown estimator is $\btheta = \{\alpha, \bbeta\tp\}\tp$.
 
+\subsubsection{Algorithm for rare logistic}
 
+\begin{itemize}
+    \item Pilot sampling: Randomly draw $r_0$ observations with case control 
+    probabilities. Denote the drawn sample as 
+    $\{\x_i^{*0}, y_i^{*0}, \pi_i^{*0}\}_{i=1}^{r_0^*}$. Compuate the pilot 
+    estimator 
+    $\htheta^{*0} = \htheta_{\mathrm{LLK}} + c(\log\frac{N_1}{N_0}$, 0, ... 0).
+    \item Compute approximated optimal subsampling probabilities for all 
+    control which are 
+    \begin{align*}
+        \pi_i^{\mathrm{opt}} = \frac{p_i(\htheta^{*0})\|\M_f^{-1} \z_i\|}{\red N\tilde\w},
+    \end{align*}
+    where 
+    \begin{align*}
+        \M_f = \oneN\sumN \exp\{ \x_i\tp \hbeta^{*0}\} \z_i\z_i\tp,
+    \end{align*}
+    under A-optimality criterion and $\M_f = \I$ under L-optimality criterion, 
+$\z_i = (1, \x_i\tp)\tp$,  
+\begin{align*}
+    \tilde\w = \frac{1}{r_0^* N} \sum_{i=1}^{r_0^{*}} \frac{p^{*0}_i(\htheta^{*0})\|\tilde\M_f^{-1} \z^{*0}_i\|}{\pi_i^{*0}}
+\end{align*}
+and 
+\begin{align*}
+    \tilde\M_f &= \frac{1}{r_0^* N} \sum_{i=1}^{r_0^*} \frac{p_i^{*0}(\htheta^{*0})\{1 - p_i^{*0}(\htheta^{*0})\} \z_i\z_i\tp}{\pi_i^{*0}}.
+\end{align*}
+for A-optimality criterion and $\tilde\M_f = \I$ for L-optimality criterion.
+\item Negative sampling. Sample observations with probabilities 
+$r \pi_i^{\mathrm{opt}} \wedge 1$. The subsampled estimator is 
+\begin{align*}
+    \htheta^{\mathrm{NS}} = \arg\max_{\bbeta} \sumN \delta_i 
+    \left[y_i \z_i\tp \btheta - \log\left\{ 1 + \exp(\z_i\tp \btheta - \log [r \pi_i]) \right\}\right].
+\end{align*}
+where $\delta_i$ is the indicator variable for $i$-th observation, and 
+$\pi_i$ is the probability for $i$-th observation to be included into 
+the subsample. When $y_i = 1$, $\pi_i = 1$; and 
+when $y_i = 0$, $\pi_i = r\pi_i^{\mathrm{opt}} \wedge 1$.
+\end{itemize}
 
 \end{document}

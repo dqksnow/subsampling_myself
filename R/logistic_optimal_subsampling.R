@@ -63,8 +63,8 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     if (method == "SWR"){
       pilot_indx <- swr_indx(N, r0, pilot_ssp)
       pinv_pilot <- 1/pilot_ssp[pilot_indx]
-      beta_pilot <- logistic_coef_estimate(X, y, 1, pilot_indx) +
-        log(sum(y)/(N - sum(y)))
+      beta_pilot <- logistic_coef_estimate(X, y, 1, pilot_indx)
+      beta_pilot[1] <- beta_pilot[1] + log(sum(y)/(N - sum(y)))
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
         MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
@@ -80,8 +80,8 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     } else {
       pilot_indx <- poisson_indx(N, r0, pilot_ssp)
       pinv_pilot <- 1/(r * pilot_ssp[pilot_indx])
-      beta_pilot <- logistic_coef_estimate(X, y, 1, pilot_indx) +
-        log(sum(y)/(N - sum(y)))
+      beta_pilot <- logistic_coef_estimate(X, y, 1, pilot_indx)
+      beta_pilot[1] <- beta_pilot[1] + log(sum(y)/(N - sum(y)))
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
         MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
@@ -118,7 +118,42 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
 
 
 
-rareLogistic <- function(X, y){
+rareLogistic <- function(X, y, r0, r,
+                         criteria = c("optA", "optL")){
+  criteria <- match.arg(criteria)
+
+  N <- length(y)
+  k <- length(unique(y)) - 1
+  pilot_ssp <- proptional_ssp(N, k, y)
+
+  pilot_indx <- poisson_indx(N, r0, pilot_ssp)
+  pinv_pilot <- 1/(length(pilot_indx) * pilot_ssp[pilot_indx])
+  theta_pilot <- logistic_coef_estimate(X, y, 1, pilot_indx)
+  theta_pilot[1] <- theta_pilot[1] + log(sum(y)/(N - sum(y)))
+
+  pbeta_pilot <- exp(c(X[,-1] %*% theta_pilot[-1]))
+  ptheta_pilot <- 1 - 1 / (1 + exp(theta_pilot[1]) * pbeta_pilot)
+
+  if(criteria == "optA"){
+    Mf <- t(X) %*% (X * pbeta_pilot)/N
+    num <- ptheta_pilot * sqrt(rowSums((X %*% solve(Mf))^2))
+    Mf_tilde <- MN(X[pilot_indx,], ptheta_pilot[pilot_indx], pinv_pilot)
+    omega <- sum(ptheta_pilot[pilot_indx] *
+                   sqrt(rowSums((X[pilot_indx,] %*% solve(Mf_tilde))^2)) *
+                   pinv_pilot)
+    ossp <- num/omega
+  } else {
+    num <- ptheta_pilot * sqrt(rowSums(X^2))
+    omega <- sum(num[pilot_indx] * pinv_pilot)
+    ossp <- num/omega
+  }
+  ossp[y==1] <- 1/r
+  ossp[r * ossp > 1] <- 1
+  second_indx <- poisson_indx(N, r, ossp)
+
+  glm(y[second_indx]~X[second_indx,]-1,
+      family = "binomial",
+      offset = -log(r * ossp[second_indx]))$coefficients
 
 }
 

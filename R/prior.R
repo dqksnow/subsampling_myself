@@ -16,8 +16,8 @@ swr_indx <- function(N, r, pi){
 
 # Poisson subsample
 poisson_indx <- function(N, r, pi){
-  u <- unif(0, 1)
-  c(1:N)[r*u < pi]
+  u <- runif(N)
+  c(1:N)[u < r*pi]
 }
 
 

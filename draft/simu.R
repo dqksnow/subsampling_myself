@@ -44,22 +44,32 @@ beta_full <- logistic_coef_estimate(X, y, 1, 1:N)
 
 
 
+## rare logistic
+
+library(mvtnorm)
+n <- 1e4
+beta0  <- c(rep(0.5, 7))
+beta0[1] <- -8
+d <- length(beta0)
+corr  <- 0.5
+sigmax  <- matrix(corr, d-1, d-1) + diag(1-corr, d-1)
+
+set.seed(123)
+X <- rmvnorm(n, rep(0, d-1), sigmax)
+X <- cbind(1, X)
+P <- 1 - 1 / (1 + exp(X %*% beta0))
+y <- rbinom(n, 1, P)
+table(y)
+
+criteria <- "optA"
+r0 <- 200
+r <- 500
+
+glm(y[second_indx]~X[second_indx,]-1,
+    family = "binomial", offset = -log(r * ossp[second_indx]))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+logistic_coef_estimate(X, y, 1/(ossp[second_indx]), second_indx)
 
 
 
