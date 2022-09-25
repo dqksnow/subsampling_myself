@@ -13,7 +13,107 @@ P <- 1 - 1 / (1 + exp(X %*% beta0))
 y <- rbinom(n, 1, P)
 table(y)
 
+beta_full <- logistic_coef_estimate(X, y, 1, 1:length(y))
+
 library("survey")
+
+r0 <- 300
+r <- 500
+logistic_optimal_subsampling(X, y, r0, r,
+                             criteria = "optA",
+                             method = "Poisson",
+                             unweighted.estimator = T,
+                             b = 2)
+
+mse_optA_swr <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_optA_swr <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "optA",
+                                                method = "SWR",
+                                                unweighted.estimator = F,
+                                                b = 2)
+  mse_optA_swr <- mse_optA_swr + sum((beta_optA_swr - beta_full)^2)
+  cat(i)
+}
+mse_optA_swr # F: 76.06969 # T: 67.89532
+
+mse_optL_swr <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_optL_swr <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "optL",
+                                                method = "SWR",
+                                                unweighted.estimator = T,
+                                                b = 2)
+  mse_optL_swr <- mse_optL_swr + sum((beta_optL_swr - beta_full)^2)
+  cat(i)
+}
+mse_optL_swr # 81.15607 # 72.02926
+
+mse_LCC_swr <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_LCC_swr <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "LCC",
+                                                method = "SWR",
+                                                unweighted.estimator = F,
+                                                b = 2)
+  mse_LCC_swr <- mse_LCC_swr + sum((beta_LCC_swr - beta_full)^2)
+  cat(i)
+}
+mse_LCC_swr # 79.56938 # 74.99367
+
+mse_optA_poisson <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_optA_poi <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "optA",
+                                                method = "Poisson",
+                                                unweighted.estimator = T,
+                                                b = 2)
+  mse_optA_poisson <- mse_optA_poisson + sum((beta_optA_poi - beta_full)^2)
+  cat(i)
+}
+mse_optA_poisson # F: 55.57619 # T: 47.57418
+
+
+mse_optL_poisson <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_optL_poi <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "optL",
+                                                method = "Poisson",
+                                                unweighted.estimator = T,
+                                                b = 2)
+  mse_optL_poisson <- mse_optL_poisson + sum((beta_optL_poi - beta_full)^2)
+  cat(i)
+}
+mse_optL_poisson # 57.1524 # 49.71734
+
+
+mse_LCC_poisson <- 0
+for(i in 1:1000){
+  set.seed(i)
+  beta_LCC_poi <- logistic_optimal_subsampling(X, y, r0, r,
+                                                criteria = "LCC",
+                                                method = "Poisson",
+                                                unweighted.estimator = F,
+                                                b = 2)
+  mse_LCC_poisson <- mse_LCC_poisson + sum((beta_LCC_poi - beta_full)^2)
+  cat(i)
+}
+mse_LCC_poisson # 76.21859 # 81.89863
+
+
+mse_uniform <- 0
+for(i in 1:1000){
+  beta_uniform <- logistic_coef_estimate(X, y, 1,
+                                         sample(1:n, r0+r, replace = T))
+  mse_uniform <- mse_uniform + sum((beta_uniform - beta_full)^2)
+  cat(i)
+}
+mse_uniform # 113.5921
 
 ## test use log(n_0/n_1) or log(n_1/n_0)
 ## use log(n_1/n_0)
@@ -71,6 +171,31 @@ glm(y[second_indx]~X[second_indx,]-1,
 
 logistic_coef_estimate(X, y, 1/(ossp[second_indx]), second_indx)
 
+beta_full <- logistic_coef_estimate(X, y, 1, 1:length(y))
 
+mse_optA <- rep(0, 1000)
+for (i in 1:1000) {
+  set.seed(i)
+  tryCatch({
+    beta_optA <- rareLogistic(X, y, r0, r, criteria = "optA")
+    mse_optA[i] <- sum((beta_optA - beta_full)^2)
+  },
+  warning = function(w) {cat("warning")})
+  cat(i)
+}
+mean(mse_optA)
+# 0.07050239
 
+mse_optL <- rep(0, 1000)
+for (i in 1:1000) {
+  set.seed(i)
+  tryCatch({
+    beta_optL <- rareLogistic(X, y, r0, r, criteria = "optL")
+    mse_optL[i] <- sum((beta_optL - beta_full)^2)
+  },
+  warning = function(w) {cat("warning")})
+  cat(i)
+}
+mean(mse_optL)
+# 1.139091
 

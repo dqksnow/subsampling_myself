@@ -21,8 +21,8 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
       beta_pilot <- logistic_coef_estimate(X, y, pinv_pilot, pilot_indx)
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
-        MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
-        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN)
+        MN1 <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
+        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN1)
       } else if (criteria == "optL"){
         ossp <- ossp_num_optL(X, y, pbeta_pilot)
       } else {
@@ -36,16 +36,16 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
       beta_pilot <- logistic_coef_estimate(X, y, pinv_pilot, pilot_indx)
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
-        MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
-        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN)
-        H <- Hest(ossp_pilot, b, r, N)
+        MN1 <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
+        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN1)
+        H <- Hest(ossp, b, r, N)
         ossp[ossp > H] <- H
         ossp_pilot <- ossp[pilot_indx]
         NPhi <- sum(ossp_pilot * pinv_pilot)
         ossp <- ossp/NPhi
       } else if (criteria == "optL"){
         ossp <- ossp_num_optL(X, y, pbeta_pilot)
-        H <- Hest(ossp_pilot, b, r, N)
+        H <- Hest(ossp, b, r, N)
         ossp[ossp > H] <- H
         ossp_pilot <- ossp[pilot_indx]
         NPhi <- sum(ossp_pilot * pinv_pilot)
@@ -67,8 +67,8 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
       beta_pilot[1] <- beta_pilot[1] + log(sum(y)/(N - sum(y)))
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
-        MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
-        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN)
+        MN1 <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
+        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN1)
       } else if (criteria == "optL"){
         ossp <- ossp_num_optL(X, y, pbeta_pilot)
       } else {
@@ -84,16 +84,16 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
       beta_pilot[1] <- beta_pilot[1] + log(sum(y)/(N - sum(y)))
       pbeta_pilot  <- pbeta(X, beta_pilot)
       if (criteria == "optA"){
-        MN <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
-        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN)
-        H <- Hest(ossp_pilot, b, r, N)
+        MN1 <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
+        ossp <- ossp_num_optA(X, y, pbeta_pilot, MN1)
+        H <- Hest(ossp, b, r, N)
         ossp[ossp > H] <- H
         ossp_pilot <- ossp[pilot_indx]
         NPhi <- sum(ossp_pilot * pinv_pilot)
         ossp <- ossp/NPhi
       } else if (criteria == "optL"){
         ossp <- ossp_num_optL(X, y, pbeta_pilot)
-        H <- Hest(ossp_pilot, b, r, N)
+        H <- Hest(ossp, b, r, N)
         ossp[ossp > H] <- H
         ossp_pilot <- ossp[pilot_indx]
         NPhi <- sum(ossp_pilot * pinv_pilot)
@@ -108,7 +108,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     pbeta_s2  <- pbeta(X, beta_s2)
     MN_s2 <- MN(X[second_indx, ], pbeta_s2[second_indx], 1)
     beta_cmb <- c(solve(MN_pilot + MN_s2,
-                        MN_pilot %*% beta_pilot + MN_s2 %*% pbeta_s2))
+                        MN_pilot %*% beta_pilot + MN_s2 %*% beta_s2))
   }
   beta_cmb
 }
@@ -135,9 +135,11 @@ rareLogistic <- function(X, y, r0, r,
   ptheta_pilot <- 1 - 1 / (1 + exp(theta_pilot[1]) * pbeta_pilot)
 
   if(criteria == "optA"){
-    Mf <- t(X) %*% (X * pbeta_pilot)/N
-    num <- ptheta_pilot * sqrt(rowSums((X %*% solve(Mf))^2))
-    Mf_tilde <- MN(X[pilot_indx,], ptheta_pilot[pilot_indx], pinv_pilot)
+    # Mf <- t(X) %*% (X * pbeta_pilot)
+    Mf_tilde <- t(X[pilot_indx,]) %*%
+      (X[pilot_indx,] * pbeta_pilot[pilot_indx] * pinv_pilot)
+    # Mf_tilde <- MN(X[pilot_indx,], ptheta_pilot[pilot_indx], pinv_pilot)
+    num <- ptheta_pilot * sqrt(rowSums((X %*% solve(Mf_tilde))^2))
     omega <- sum(ptheta_pilot[pilot_indx] *
                    sqrt(rowSums((X[pilot_indx,] %*% solve(Mf_tilde))^2)) *
                    pinv_pilot)
@@ -148,16 +150,13 @@ rareLogistic <- function(X, y, r0, r,
     ossp <- num/omega
   }
   ossp[y==1] <- 1/r
-  ossp[r * ossp > 1] <- 1
+  ossp[r * ossp > 1] <- 1/r
   second_indx <- poisson_indx(N, r, ossp)
 
   glm(y[second_indx]~X[second_indx,]-1,
       family = "binomial",
       offset = -log(r * ossp[second_indx]))$coefficients
-
 }
-
-
 
 
 
