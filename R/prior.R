@@ -2,9 +2,6 @@
 # calculate the case control subsampling probabilities
 # for logistic regression & softmax regression
 proptional_ssp <- function(N, k, y){
-  I <- matrix(0, nrow = N, ncol = k)
-  I[cbind(seq_along(y), y)] <- 1
-
   prob <- 1/((k+1) * as.data.frame(table(y))$Freq)
   return(prob[y+1])
 }
@@ -37,6 +34,10 @@ logistic_coef_estimate <- function(X, y, weights, indx){
   beta
 }
 
+softmax_coef_estimate <- function(X, y, weights, indx){
+  fit <- nnet::multinom(y[indx] ~ X[indx,] - 1, weights = weights)
+  t(coef(fit))
+}
 
 
 

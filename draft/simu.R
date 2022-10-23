@@ -199,3 +199,41 @@ for (i in 1:1000) {
 mean(mse_optL)
 # 1.139091
 
+
+## softmax regression
+
+d <- 3
+k <- 2
+N <- 1e4
+
+beta0_true <- rep(0, d)
+beta1_true <- rep(1, d)
+beta2_true <- rep(2, d)
+
+## mzNorm
+library(MASS)
+set.seed(1)
+mu <- rep(0, d)
+diagonal <- as.vector(rep(1,d))
+sigma <- matrix(0.5, nrow = d, ncol = d)
+diag(sigma) <- diagonal
+X <- mvrnorm(N, mu, sigma)
+
+prob <- cbind(exp(X %*% beta0_true),
+              exp(X %*% beta1_true),
+              exp(X %*% beta2_true))
+set.seed(1)
+mChoices = t(apply(prob, 1, rmultinom, n = 1, size = 1))
+y = apply(mChoices, 1, function(x) which(x==1)-1)
+table(y)
+
+## check nnet package multinom function
+library(nnet)
+fit_basic <- multinom(y ~ X - 1)
+summary(fit_basic)
+NR_multi2(X, y, 1)
+
+
+
+
+

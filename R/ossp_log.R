@@ -19,51 +19,22 @@ ossp_num_optL <- function(X, y, pbeta){
   sqrt((y - pbeta)^2 * rowSums(X^2))
 }
 
+pbeta_multi <- function(X, beta){
+  exp(X %*% beta - matrixStats::rowLogSumExps(cbind(0, X %*% beta)))
+}
 
-# logistic_swr_ossp <- function(X, y, pilot_indx,
-#                               pinv_pilot, beta_pilot,
-#                               criteria = c("optA", "optL")){
-#
-#   pbeta  <- pbeta(X, beta_pilot)
-#   if (criteria == "optA"){
-#     MN <- MN(X[pilot_indx, ], pbeta[pilot_indx], pinv_pilot)
-#     ossp <- ossp_num_optA(X, y, pbeta, MN)
-#   } else if (criteria == "optL"){
-#     ossp <- ossp_num_optL(X, y, pbeta)
-#   } else {
-#     ossp <- abs(y - pbeta)
-#   }
-#   ossp <- c(ossp / sum(ossp))
-#   ossp
-# }
-#
-#
-#
-# logistic_poisson_ossp <- function(X, y, pilot_indx,
-#                                   pinv_pilot, beta_pilot,
-#                                   criteria = c("optA", "optL"), b, r, N){
-#   pbeta  <- pbeta(X, beta_pilot)
-#   if (criteria == "optA"){
-#     MN <- MN(X[pilot_indx, ], pbeta[pilot_indx], pinv_pilot)
-#     ossp <- ossp_num_optA(X, y, pbeta, MN)
-#     H <- Hest(ossp_pilot, b, r, N)
-#     ossp[ossp > H] <- H
-#     ossp_pilot <- ossp[pilot_indx]
-#     NPhi <- sum(ossp_pilot * pinv_pilot)
-#     ossp <- ossp/NPhi
-#   } else if (criteria == "optL"){
-#     ossp <- ossp_num_optL(X, y, pbeta)
-#     H <- Hest(ossp_pilot, b, r, N)
-#     ossp[ossp > H] <- H
-#     ossp_pilot <- ossp[pilot_indx]
-#     NPhi <- sum(ossp_pilot * pinv_pilot)
-#     ossp <- ossp/NPhi
-#   } else {
-#     ossp <- abs(y - pbeta)
-#     ossp <- c(ossp / sum(ossp))
-#   }
-#
-# }
-#
-#
+MN_multi <- function(X, pbeta, k, d, pinv){
+  X_kd <- X[, rep(1:d, k)]
+  diagp <- pbeta[, rep(1:k, each = d)]
+  spinv <- sqrt(pinv)
+  diagpX_pd <- (diagp * X_kd) * spinv
+  MN_p1 <- t(X_kd * spinv) %*% diagpX_pd
+
+  MN_p2 <- t(diagpX_pd) %*% (diagpX_pd)
+  MN <- MN_p1 * (diag(1, k) %x% matrix(1, nrow = d, ncol = d)) - MN_p2
+  MN
+}
+
+MN_multi(X[pilot_indx,], pbeta_pilot, k, d, pinv = pinv_pilot)
+
 
