@@ -7,12 +7,18 @@ MN <- function(X, pbeta, pinv){
   t(X) %*% (X * phi * pinv)
 }
 
+Psi <- function(X, y, pbeta, pinv){
+  psi <- (y - pbeta)^2
+  t(X) %*% (X * psi * pinv^2)
+}
+
+
 pbeta <- function(X, beta){
   1 - 1 / (1 + exp(c(X %*% beta)))
 }
 
 ossp_num_optA <- function(X, y, pbeta, MN){
-  sqrt((y - pbeta)^2 * rowSums((X %*% solve(MN))^2))
+  sqrt((y - pbeta)^2 * colSums(solve(MN, t(X))^2))
 }
 
 ossp_num_optL <- function(X, y, pbeta){
@@ -34,7 +40,5 @@ MN_multi <- function(X, pbeta, k, d, pinv){
   MN <- MN_p1 * (diag(1, k) %x% matrix(1, nrow = d, ncol = d)) - MN_p2
   MN
 }
-
-MN_multi(X[pilot_indx,], pbeta_pilot, k, d, pinv = pinv_pilot)
 
 

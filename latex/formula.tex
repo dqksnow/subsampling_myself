@@ -60,10 +60,30 @@ For the pilot sample,
 The final estimator is obtained by combining the subsample estimators from two 
 stages.
 \begin{align*}
-    \hbeta_{\mathrm{CMB}} = &\left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{UW}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{UW}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}^{-1}\\
-    &\quad \left[ \left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{UW}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp\right\}\hbeta_{\mathrm{UW}}^{*0} + \left\{\sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{UW}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}\hbeta_{\mathrm{UW}}^{*1} \right]
+    \hbeta_{\mathrm{CMB}} = &\left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}^{-1}\\
+    &\quad \left[ \left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp\right\}\hbeta_{\mathrm{UW}}^{*0} + \left\{\sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}\hbeta_{\mathrm{UW}}^{*1} \right]
 \end{align*}
 where $\phi_i = p(\x_i, \bbeta)\{ 1 - p(\x_i, \bbeta)\}$.
+
+
+\subsection{Variance Estimation}
+
+For weighted estimator, the variance-covariance matrix of the final estimator can be estiamted by
+\begin{align*}
+    \V = &\left\{\frac{1}{N}\sum_{i=1}^{r_0} \frac{\phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp}{\pi_i^{*0}} + \frac{1}{N}\sum_{i=1}^{r_1} \frac{\phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp}{\pi_i^{*1}}\right\}^{-1}\\
+    &\quad \left[\frac{1}{N^2} \sum_{i=1}^{r_0} \frac{\left\{\psi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \right\}^2 \x_i^{*0} {\x_i^{*0}}\tp}{(\pi_i^{*0})^2} + \frac{1}{N^2}\sum_{i=1}^{r_1} \frac{\left\{\psi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1})\right\}^2 \x_i^{*1} {\x_i^{*1}}\tp}{(\pi_i^{*1})^2} \right]\\
+    &\quad\left\{\frac{1}{N}\sum_{i=1}^{r_0} \frac{\phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp}{\pi_i^{*0}} + \frac{1}{N}\sum_{i=1}^{r_1} \frac{\phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp}{\pi_i^{*1}}\right\}^{-1}
+\end{align*}
+where $\psi_i = y_i - p(\x_i, \bbeta)$.
+
+
+For unweighted estimator, the variance-covariance matrix of the final estimator can be estimated by
+\begin{align*}
+    \V = &\left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}^{-1}\\
+    &\quad \left[\sum_{i=1}^{r_0} \left\{ \psi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \right\}^2 \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \left\{ \psi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1})\right\}^2 \x_i^{*1} {\x_i^{*1}}\tp \right]\\
+    &\quad\left\{\sum_{i=1}^{r_0} \phi_i^{*0}(\hbeta_{\mathrm{LLK}}^{*0}) \x_i^{*0} {\x_i^{*0}}\tp + \sum_{i=1}^{r_1} \phi_i^{*1}(\hbeta_{\mathrm{LLK}}^{*1}) \x_i^{*1} {\x_i^{*1}}\tp\right\}^{-1}
+\end{align*}
+
 
 \subsection{Rare logistic}
 

@@ -20,9 +20,9 @@ library("survey")
 r0 <- 300
 r <- 500
 logistic_optimal_subsampling(X, y, r0, r,
-                             criteria = "optA",
+                             criteria = "optL",
                              method = "Poisson",
-                             unweighted.estimator = T,
+                             unweighted.estimator = F,
                              b = 2)
 
 mse_optA_swr <- 0
@@ -233,6 +233,15 @@ fit_basic <- multinom(y ~ X - 1)
 summary(fit_basic)
 NR_multi2(X, y, 1)
 
+
+
+## check X %*% solve(MN) and
+
+a <- rowSums((X %*% solve(MN1))^2)
+b <- colSums(solve(MN1, t(X))^2)
+
+library(microbenchmark)
+microbenchmark(rowSums((X %*% solve(MN1))^2), colSums(solve(MN1, t(X))^2))
 
 
 

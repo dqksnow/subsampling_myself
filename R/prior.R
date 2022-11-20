@@ -6,6 +6,16 @@ proptional_ssp <- function(N, k, y){
   return(prob[y+1])
 }
 
+
+
+# for logistic regression
+# pilot sample subsampling without replacement
+# what if sum(y == 1) < r/2 ???
+plt_indx <- function(N, y, r){
+  c(sample(c(1:N)[y == 0], r/2, replace = F),
+    sample(c(1:N)[y == 1], r/2, replace = F))
+}
+
 # subsample with replacement
 swr_indx <- function(N, r, pi){
   sample(1:N, r, T, pi)
