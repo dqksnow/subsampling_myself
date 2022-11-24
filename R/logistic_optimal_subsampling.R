@@ -57,6 +57,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
 
     pbeta_pilot_llk <- pbeta(X[pilot_indx, ], beta_pilot_llk)
     MN1 <- MN(X[pilot_indx, ], pbeta_pilot_llk, 1)
+    Psi1 <- Psi(X[pilot_indx, ], y[pilot_indx], pbeta_pilot_llk, 1)
 
     if (criteria == "optA"){
       MN_pilot <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)

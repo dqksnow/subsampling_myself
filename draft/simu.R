@@ -25,7 +25,7 @@ logistic_optimal_subsampling(X, y, r0, r,
                              unweighted.estimator = F,
                              b = 2)
 
-mse_optA_swr <- 0
+mse_optA_swr <- var_optA_swr <- 0
 for(i in 1:1000){
   set.seed(i)
   beta_optA_swr <- logistic_optimal_subsampling(X, y, r0, r,
@@ -33,10 +33,12 @@ for(i in 1:1000){
                                                 method = "SWR",
                                                 unweighted.estimator = F,
                                                 b = 2)
-  mse_optA_swr <- mse_optA_swr + sum((beta_optA_swr - beta_full)^2)
+  mse_optA_swr <- mse_optA_swr + sum((beta_optA_swr$beta - beta_full)^2)
+  var_optA_swr <- var_optA_swr + sum(beta_optA_swr$var_beta)
   cat(i)
 }
-mse_optA_swr # F: 76.06969 # T: 67.89532
+mse_optA_swr # F: 69.89392 # T: 64.57807
+var_optA_swr
 
 mse_optL_swr <- 0
 for(i in 1:1000){
@@ -46,7 +48,7 @@ for(i in 1:1000){
                                                 method = "SWR",
                                                 unweighted.estimator = T,
                                                 b = 2)
-  mse_optL_swr <- mse_optL_swr + sum((beta_optL_swr - beta_full)^2)
+  mse_optL_swr <- mse_optL_swr + sum((beta_optL_swr$beta - beta_full)^2)
   cat(i)
 }
 mse_optL_swr # 81.15607 # 72.02926
