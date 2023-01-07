@@ -3,7 +3,7 @@
 # If you want to get the results of all methods and all criteria at once, please use this code.
 
 # choose a type of simulation data to generate,and then run the simu code.
-
+# e.g. run line 7 to line 38, then run line 41 to line 52 to generate data, then run line 131 to the end.
 source("R/prior.R")
 source('R/logistic_optimal_subsampling.R')
 source('R/ossp_log.R')
