@@ -1,13 +1,13 @@
 
 
 # criteria = c("optA", "optL", "LCC", "custom")
-# method = c("SWR", "Poisson")
+# method = c("withReplace", "Poisson")
 
 logistic_optimal_subsampling <- function(X, y, r0, r,
                                          criteria = "optL",
                                          method = "Poisson",
                                          MN_custom,
-                                         unweighted.estimator = F,
+                                         weighted.estimator = T,
                                          b = 2){
   # criteria <- match.arg(criteria)
   # method <- match.arg(method)
@@ -18,7 +18,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
   pinv_pilot <- 1/c(rep(1/(2 * (N - sum(y))), r0/2),
                     rep(1/(2 * sum(y)), r0/2))
 
-  if (unweighted.estimator == F){
+  if (weighted.estimator == T){
     beta_pilot <- logistic_coef_estimate(X, y, pinv_pilot, pilot_indx)
     pbeta_pilot  <- pbeta(X, beta_pilot)
     MN1 <- MN(X[pilot_indx, ], pbeta_pilot[pilot_indx], pinv_pilot)
@@ -33,7 +33,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     } else if (criteria == "custom"){
       ossp <- ossp_num_optA(X, y, pbeta_pilot, MN_custom)
     }
-    if (method == "SWR"){
+    if (method == "withReplace"){
       ossp <- c(ossp / sum(ossp))
       second_indx <- swr_indx(N, r, ossp)
     } else if (method == "Poisson"){
@@ -49,7 +49,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     pbeta_s2  <- pbeta(X[second_indx,], beta_s2)
     MN_s2 <- MN(X[second_indx, ], pbeta_s2, pinv_s2)
     Psi2 <- Psi(X[second_indx, ], y[second_indx], pbeta_s2, pinv_s2)
-  } else if (unweighted.estimator == T){
+  } else if (weighted.estimator == F){
     beta_pilot_llk <- beta_pilot <-
       logistic_coef_estimate(X, y, 1, pilot_indx)
     beta_pilot[1] <- beta_pilot[1] + log(sum(y)/(N - sum(y)))
@@ -69,7 +69,7 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
     } else if (criteria == "custom"){
       ossp <- ossp_num_optA(X, y, pbeta_pilot, MN_custom)
     }
-    if (method == "SWR"){
+    if (method == "withReplace"){
       ossp <- c(ossp / sum(ossp))
       second_indx <- swr_indx(N, r, ossp)
     } else if (method == "Poisson"){
