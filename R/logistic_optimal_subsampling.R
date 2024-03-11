@@ -89,7 +89,9 @@ logistic_optimal_subsampling <- function(X, y, r0, r,
   MNsolve <- solve(MN1 + MN_s2)
   beta_cmb <- c(MNsolve %*% (MN1 %*% beta_pilot + MN_s2 %*% beta_s2))
   var_beta <- MNsolve %*% (Psi1+Psi2) %*% MNsolve
-  return(list(beta = beta_cmb,
+  return(list(beta.plt =beta_pilot,
+    beta.ssp = beta_s2,
+    beta.cmb = beta_cmb,
               var_beta = var_beta,
               ossp = ossp,
               pilot_indx = pilot_indx,

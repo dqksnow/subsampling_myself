@@ -30,6 +30,39 @@ poisson_indx <- function(N, r, pi){
 
 # compute coefficients for logistic regression
 # with survey package
+# logistic.coef.estimate <-
+#   function(X,
+#            Y,
+#            offset = rep(0, length(Y)),
+#            start = rep(0, ncol(X)),
+#            weights = rep(1, length(Y))) {
+#     if (length(weights) == 1)
+#       weights <- rep(weights, length(Y))
+#     if (offset != rep(0, length(Y)) & weights != rep(1, length(Y))) {
+#       stop("offset will only be needed in the unweighted likelihood function.")
+#     }
+#     data <- as.data.frame(cbind(Y, X))
+#     formula <- paste(colnames(data)[1], "~",
+#                      paste(colnames(data)[-1], collapse = "+"), "-1")
+#     design <- survey::svydesign(ids =  ~ 1,
+#                                 weights =  ~ weights,
+#                                 data = data)
+#     fit <- try(
+#       beta <- survey::svyglm( as.formula(formula),
+#                               design = design,
+#                               offset = offset,
+#                               start = start,
+#                               family = quasibinomial(link = "logit"))$coefficients,
+#       silent=TRUE
+#     )
+#     if ("try-error" %in% class(fit)){
+#       message("Warning: an error occurred while calling 'glm.fit': ", geterrmessage(),
+#               "This is probably due to the iteratively reweighted least squares algorithm called by 'glm.fit' not getting converged. Tring another function 'getMSLE' to replace 'glm.fit'.")
+#       beta <- getMSLE(X, Y, offset = offset, start = start)$beta
+#     }
+#     return(list(beta = beta))
+#   }
+
 logistic_coef_estimate <- function(X, y, weights, indx){
 
   data <- as.data.frame(cbind(y, X)[indx,])
